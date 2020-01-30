@@ -5,9 +5,9 @@ import Person from "./Person/Person";
 const App = props => {
   const [personsState, setPersonsState] = useState({
     persons: [
-      { name: "Max", age: 28 },
-      { name: "Manu", age: 31 },
-      { name: "Stephanie", age: 26 }
+      { id: "1", name: "Max", age: 28 },
+      { id: "2", name: "Manu", age: 31 },
+      { id: "3", name: "Stephanie", age: 26 }
     ],
     otherState: "some other value",
     showPersons: false
@@ -26,13 +26,27 @@ const App = props => {
     });
   };
 
-  const nameChangedHandler = event => {
+  const nameChangedHandler = (event, id) => {
+    const personIndex = personsState.persons.findIndex(p => {
+      return p.id === id;
+    });
+
+    const persons = [...personsState.persons];
+    persons[personIndex].name = event.target.value;
+
     setPersonsState({
-      persons: [
-        { name: "Max", age: 28 },
-        { name: event.target.value, age: 29 },
-        { name: "Stephanie", age: 27 }
-      ],
+      persons: persons,
+      otherState: personsState.otherState,
+      showPersons: personsState.showPersons
+    });
+  };
+
+  const deletePerdonHandler = personIndex => {
+    // const persons = personsState.persons.slice();
+    const persons = [...personsState.persons];
+    persons.splice(personIndex, 1);
+    setPersonsState({
+      persons: persons,
       otherState: personsState.otherState,
       showPersons: personsState.showPersons
     });
@@ -58,22 +72,17 @@ const App = props => {
   if (personsState.showPersons) {
     persons = (
       <div>
-        <Person
-          name={personsState.persons[0].name}
-          age={personsState.persons[0].age}
-        />
-        <Person
-          name={personsState.persons[1].name}
-          age={personsState.persons[1].age}
-          click={switchNameHandler.bind(undefined, "Max!")}
-          changed={nameChangedHandler}
-        >
-          My Hobbies: Racing
-        </Person>
-        <Person
-          name={personsState.persons[2].name}
-          age={personsState.persons[2].age}
-        />
+        {personsState.persons.map((person, index) => {
+          return (
+            <Person
+              name={person.name}
+              age={person.age}
+              click={() => deletePerdonHandler(index)}
+              changed={event => nameChangedHandler(event, person.id)}
+              key={person.id}
+            />
+          );
+        })}
       </div>
     );
   }
