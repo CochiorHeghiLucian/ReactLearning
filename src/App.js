@@ -52,15 +52,6 @@ const App = props => {
     });
   };
 
-  const style = {
-    backgroundColor: "green",
-    color: "white",
-    font: "inherit",
-    border: "1px solid blue",
-    padding: "8px",
-    cursor: "pointer"
-  };
-
   const togglePersonsHandler = () => {
     setPersonsState({
       persons: personsState.persons,
@@ -70,6 +61,7 @@ const App = props => {
   };
 
   let persons = null;
+  let btnClass = "";
   if (personsState.showPersons) {
     persons = (
       <div>
@@ -86,7 +78,7 @@ const App = props => {
         })}
       </div>
     );
-    style.backgroundColor = "red";
+    btnClass = classes.Red;
   }
 
   const assignedClasses = [];
@@ -103,7 +95,7 @@ const App = props => {
     <div className={classes.App}>
       <h1>Hi,I'm a react developer!</h1>
       <p className={assignedClasses.join(" ")}>This is really working</p>
-      <button onClick={() => togglePersonsHandler()} style={style}>
+      <button onClick={() => togglePersonsHandler()} className={btnClass}>
         Toggle Persons
       </button>
       {persons}
